@@ -1,27 +1,41 @@
 # latest python
 FROM python:3.7-alpine
 
-RUN apt-get update
-RUN apt-get upgrade
-RUN apt-get install git
+RUN apk update
+RUN apk upgrade
+RUN apk add openssh
+RUN apk add git
 
 RUN adduser -D backend
-USER backend
 
 WORKDIR /home/backend
 
-#setup virtual env
+###Provision###
+
+#virtual env#
+
+#end virtual env#
+
+#application, configuration, dependencies, webserver#
+RUN git clone https://github.com/fieranmason/QFlaskView.git
+ENV FLASK_APP app
+COPY requirements.txt requirements.txt
 RUN python -m venv venv
-
-#install webserver
+RUN venv/bin/pip install -r requirements.txt
 RUN venv/bin/pip install gunicorn
+#end application and configuration#
 
-
+#entry point with permissions
 COPY ./boot.sh ./
 RUN chmod 744 boot.sh
+#entry point#
 
-ENV FLASK_APP backend
+#ownership#
+RUN chown -R backend:backend .
+#end ownership#
 
 EXPOSE 5000
+
+USER backend
 
 ENTRYPOINT ["./boot.sh"]

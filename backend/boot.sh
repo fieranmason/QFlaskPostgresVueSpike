@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# start virtual environment
-source venv/bin/activate
+echo "Initializing..."
+
+
 
 #start postgres and wait for it to boot
 echo "Waiting for postgres..."
@@ -12,11 +13,13 @@ done
 
 echo "PostgreSQL started"
 
-# run migrations
-flask db upgrade
+# pwd + list
+pwd
+ls -al
 
-# for use with babel and i18n/l10n
-flask translate compile
+# start virtual environment
+cd QFlaskView
+source ~/venv/bin/activate
 
 # start gunicorn
-exec gunicorn -b :5000 --reload --access-logfile - --error-logfile - backend:app
+exec gunicorn -b :5000 --reload --access-logfile - --error-logfile - hello:app

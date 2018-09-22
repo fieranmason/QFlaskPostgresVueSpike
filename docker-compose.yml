@@ -8,6 +8,8 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@persistence:5432/users_dev
     depends_on:
       - persistence
+    ports:
+      - 5000:5000
   persistence:
     build:
       context: ./persistence
