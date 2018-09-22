@@ -1,0 +1,19 @@
+version: '3.6'
+services:
+  backend:
+    build:
+      context: ./backend
+    image: backend:latest
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@persistence:5432/users_dev
+    depends_on:
+      - persistence
+  persistence:
+    build:
+      context: ./persistence
+    image: persistence:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
